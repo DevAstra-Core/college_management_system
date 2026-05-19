@@ -1,3 +1,47 @@
+//page laoder
+const mainloader = document.getElementById("mainloader");
+
+// disable browser auto scroll restore
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+
+// disable scroll while loading
+document.body.classList.add("loading");
+
+window.addEventListener("load", () => {
+
+    // force start at home
+    const home = document.getElementById("home");
+    if (home) {
+        home.scrollIntoView({ behavior: "instant" });
+    } else {
+        window.scrollTo(0, 0);
+    }
+
+    document.body.classList.remove("loading");
+
+    setTimeout(() => {
+        mainloader.style.opacity = "0";
+        mainloader.style.transition = "opacity 0.5s ease";
+
+        setTimeout(() => {
+            mainloader.style.display = "none";
+        }, 500);
+    }, 500);
+
+});
+
+
+
+
+
+
+
+
+
+
+
 const sections = document.querySelectorAll("section");
 const navItems = document.querySelectorAll("#nav-item");
 
@@ -58,6 +102,52 @@ allLinks.forEach(link => {
             navbarMenu.classList.remove("active");
         }
     });
+});
+
+
+/*\*/ 
+// Navbar active on scroll (desktop + mobile fixed) option active/deactive logic
+window.addEventListener("DOMContentLoaded", () => {
+
+    const navLinks = document.querySelectorAll('.nav-options');
+
+    function setActiveNav() {
+
+    let current = "home";
+
+    document.querySelectorAll('section[id]').forEach(section => {
+
+        // Ignore hidden sections
+        if (window.getComputedStyle(section).display === "none") return;
+
+        const triggerPoint = section.offsetTop - window.innerHeight / 2;
+
+        // Change active when next section enters screen
+        if (window.scrollY >= triggerPoint) {
+            current = section.id;
+        }
+    });
+
+    navLinks.forEach(link => {
+
+        const navItem = link.parentElement;
+        navItem.classList.remove("active");
+
+        if (link.getAttribute("href") === "#" + current) {
+            navItem.classList.add("active");
+        }
+    });
+}
+
+    // Run initially
+    setActiveNav();
+
+    // Run on scroll
+    window.addEventListener("scroll", setActiveNav);
+
+    // Run on resize (important for responsive changes)
+    window.addEventListener("resize", setActiveNav);
+
 });
 
 
@@ -146,6 +236,8 @@ const observer = new IntersectionObserver((entries) => {
 });
 
 reveals.forEach(el => observer.observe(el));
+
+
 
 //course card effect
 
@@ -455,7 +547,11 @@ pwrapper.addEventListener("scroll", updateSpotlight);
 // run once on load
 updateSpotlight();
 
-//
+
+
+
+
+//professor spotlight - side boxes logic
 
 const pdwrapper = document.querySelector(".proffessor-wrapper");
 const pdcards = document.querySelectorAll(".teachers");
@@ -559,6 +655,15 @@ leftBtn.addEventListener("click", () => {
 });
 
 
+
+
+
+
+
+
+
+
+
 /*events section toggle button */
 
 
@@ -614,6 +719,10 @@ upcomingBtn.addEventListener("click", () => {
 
 
 
+
+
+
+
 /* club section logic */
 const clubcard = document.querySelectorAll(".club1-card");
 
@@ -632,6 +741,16 @@ clubcard.forEach(card => {
 document.addEventListener("click", () => {
     clubcard.forEach(card => card.classList.remove("active"));
 });
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -758,6 +877,14 @@ facilityCards.forEach((card, i) => {
 // Initial start
 activateCard(index);
 startAuto();
+
+
+
+
+
+
+
+
 
 
 
@@ -927,12 +1054,15 @@ document.addEventListener('keydown', (e) => {
 
 
 
+
+
+
+
+
 //about section text details reveal js
 
 
 const elements = document.querySelectorAll(".text-trigger");
-
-
 //mobile optimization - disable on mobile for better performance aniamtion
 const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
