@@ -186,6 +186,12 @@ window.addEventListener("scroll", function(){
   }
 
 });
+
+
+
+
+
+
 // slider hero-section
 
 
@@ -213,6 +219,100 @@ setInterval(() => {
     showSlide(currentSlide);
 
 }, 10000);
+
+/*modifiable drag slide*/ 
+// ===== DRAG / SWIPE CONTROL =====
+
+const hero = document.querySelector(".herosec-container");
+
+let startX = 0;
+let isDragging = false;
+const threshold = 80;
+
+// Mouse
+hero.addEventListener("mousedown", (e) => {
+
+    e.preventDefault(); // stop image dragging
+
+    isDragging = true;
+    startX = e.clientX;
+});
+
+hero.addEventListener("mouseup", (e) => {
+
+    if (!isDragging) return;
+    isDragging = false;
+
+    let diff = e.clientX - startX;
+
+    if (diff > threshold) {
+        // drag right = previous
+        currentSlide--;
+        if(currentSlide < 0){
+            currentSlide = slides.length - 1;
+        }
+        showSlide(currentSlide);
+    }
+
+    else if (diff < -threshold) {
+        // drag left = next
+        currentSlide++;
+        if(currentSlide >= slides.length){
+            currentSlide = 0;
+        }
+        showSlide(currentSlide);
+    }
+
+});
+
+hero.addEventListener("mouseleave", () => {
+    isDragging = false;
+});
+
+
+// ===== TOUCH SUPPORT =====
+
+hero.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+});
+
+hero.addEventListener("touchend", (e) => {
+
+    let endX = e.changedTouches[0].clientX;
+    let diff = endX - startX;
+
+    if (diff > threshold) {
+        currentSlide--;
+        if(currentSlide < 0){
+            currentSlide = slides.length - 1;
+        }
+    }
+
+    else if (diff < -threshold) {
+        currentSlide++;
+        if(currentSlide >= slides.length){
+            currentSlide = 0;
+        }
+    }
+
+    showSlide(currentSlide);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //  highlight scroll (reveal)
 
