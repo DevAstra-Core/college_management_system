@@ -2853,6 +2853,7 @@ color: white;
 }
 .club-container{
     flex-direction: column;
+        contain: layout;
 }
 .club1-card{
   position: relative;
@@ -2862,6 +2863,10 @@ box-shadow: rgb(255 255 255 / 0%) 0px 0px 0px, rgb(0 0 0 / 0%) 0px 0px 0px;
   z-index: 1;
   border-radius: 21px;
 overflow: hidden;
+    transition: width .35s ease;
+    will-change: width;
+    contain: layout paint;
+        transform: translateZ(0);
 }
 
 #cc1 {
