@@ -824,11 +824,24 @@ upcomingBtn.addEventListener("click", () => {
 
 
 /* club section logic */
+/* club section logic + mobile center active */
+
 const clubcard = document.querySelectorAll(".club1-card");
 
+let autoTimer;
+let lastAutoCard = null;
+let manualMode = false;
+
+// ---------- TAP LOGIC ----------
 clubcard.forEach(card => {
+
     card.addEventListener("click", (e) => {
+
         e.stopPropagation();
+
+        // manual overrides auto
+        manualMode = true;
+        clearTimeout(autoTimer);
 
         clubcard.forEach(c => {
             if (c !== card) c.classList.remove("active");
@@ -836,10 +849,80 @@ clubcard.forEach(card => {
 
         card.classList.toggle("active");
     });
+
 });
 
+// outside click
 document.addEventListener("click", () => {
-    clubcard.forEach(card => card.classList.remove("active"));
+
+    manualMode = false;
+
+    clubcard.forEach(card =>
+        card.classList.remove("active")
+    );
+
+});
+
+// ---------- CENTER ACTIVE ----------
+function checkCenterCard(){
+
+    // phone only
+    if(window.innerWidth > 768) return;
+
+    const screenCenter = window.innerHeight / 2;
+    let closestCard = null;
+    let closestDistance = Infinity;
+
+    clubcard.forEach(card => {
+
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(screenCenter - cardCenter);
+
+        if(distance < closestDistance){
+            closestDistance = distance;
+            closestCard = card;
+        }
+
+    });
+
+    // card reached center
+    if(closestCard && closestDistance < 60){
+
+        // if different card reaches center,
+        // auto regains control
+        if(lastAutoCard !== closestCard){
+
+            manualMode = false;
+            lastAutoCard = closestCard;
+        }
+
+        // only run auto when manual not active
+        if(!manualMode){
+
+            clubcard.forEach(c=>{
+                if(c !== closestCard){
+                    c.classList.remove("active");
+                }
+            });
+
+            closestCard.classList.add("active");
+
+            clearTimeout(autoTimer);
+
+            autoTimer = setTimeout(()=>{
+
+                if(!manualMode){
+                    closestCard.classList.remove("active");
+                }
+
+            },5000);
+        }
+    }
+}
+
+window.addEventListener("scroll", () => {
+    requestAnimationFrame(checkCenterCard);
 });
 
 
