@@ -928,7 +928,66 @@ window.addEventListener("scroll", () => {
 
 
 
+(() => {
 
+    if (window.innerWidth > 768) return; // only mobile
+
+    let lastActive = null;
+    let ticking = false;
+
+    function getBestCard() {
+        const center = window.innerHeight * 0.5;
+
+        let best = null;
+        let min = Infinity;
+
+        clubcard.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const c = rect.top + rect.height / 2;
+
+            const d = Math.abs(center - c);
+
+            if (d < min) {
+                min = d;
+                best = card;
+            }
+        });
+
+        return { best, min };
+    }
+
+    function update() {
+        const { best, min } = getBestCard();
+
+        if (!best) return;
+
+        // strict threshold = prevents flicker
+        if (min < 70 && best !== lastActive) {
+
+            lastActive = best;
+
+            // DO NOT fight your old logic aggressively
+            clubcard.forEach(c => {
+                if (c !== best) c.classList.remove("active");
+            });
+
+            best.classList.add("active");
+        }
+    }
+
+    window.addEventListener("scroll", () => {
+
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                update();
+                ticking = false;
+            });
+            ticking = true;
+        }
+
+    }, { passive: true });
+
+})();
 
 
 
