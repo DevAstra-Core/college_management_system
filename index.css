@@ -231,9 +231,6 @@ color: white;
     margin-left: 10px;
     transition: 0.4s ease-in-out;
     margin-right: 10px;
-    padding: 5px;
-    padding-left: 12px;
-    padding-right: 12px;
     border-radius: 9px;
     border-width: 2px;
     color: rgb(255, 255, 255);
@@ -245,6 +242,10 @@ text-decoration: none;
 transition: 0.4s ease-in-out;
 cursor: pointer;
 text-shadow:  0px 10px 25px rgba(0,0,0,0.55);
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 5px 12px;
 }
 #nav-item:hover .nav-options{
     color: black;
@@ -2959,13 +2960,20 @@ overflow: hidden;
 }
 .club1-card.active .clubCard-infotop {
 
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(0px);
     background-color: rgb(0 0 0 / 30%);
     /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); */
     border-radius: 20px;
-
+    transform: rotateY(0deg);
 }
-
+.club1-card.active {
+    transform: rotateY(0deg);
+    transition: .4s ease-in-out;
+    width: 300px;
+}
+.club1-card.active .wave {
+    filter: blur(0px);
+}
 .clubCard-infotop{
     backdrop-filter: blur(0px);
     padding: 5px;
@@ -2975,6 +2983,7 @@ overflow: hidden;
     display: none;
     overflow: visible;
     margin-top: 0;
+    transition: 0.5s ease-in-out;
 }
 .club1-card.active .clubcard-details p{
     display: flex;
